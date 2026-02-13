@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include "canny_opencv.h"
 #include "image_io.h"
 #include "util.h"
 #include "sobel.h"
@@ -23,6 +23,7 @@ static void PrintUsage()
         << "  ./hw2 copy_raw <in.raw> <out.raw> <w> <h> <c>\n"
         << "  ./hw2 rgb2gray <in_rgb.raw> <out_gray.raw> <w> <h>\n"
         << "  ./hw2 sobel_edge_detector <in_rgb.raw> <out_prefix> <w> <h> <edgePercent>\n"
+        << "  ./hw2 canny_edge_detector <in.jpg> <out_prefix> <lowThresh> <highThresh>\n"
         << "\n"
         << "Notes:\n"
         << "  - edgePercent is 0..100 (e.g., 10 means keep top 10% magnitudes as edges)\n"
@@ -30,7 +31,9 @@ static void PrintUsage()
         << "      <out_prefix>_gx.raw\n"
         << "      <out_prefix>_gy.raw\n"
         << "      <out_prefix>_mag.raw\n"
-        << "      <out_prefix>_edge.raw   (0=edge, 255=background)\n";
+        << "      <out_prefix>_edge.raw   (0=edge, 255=background)\n"
+        << "  - canny outputs:\n"
+        << "      <out_prefix>_canny_L<low>_H<high>.raw   (0=background, 255=edge)\n";
 }
 
 static bool ParseInt(const string &s, int &out)
@@ -162,6 +165,32 @@ int main(int argc, char **argv)
 
         cout << "[sobel_edge_detector] OK. mag_threshold=" << r.mag_threshold << "\n";
         return 0;
+    }
+
+    if (cmd == "canny_edge_detector")
+    {
+        // Usage:
+        // ./hw2 canny_edge_detector <input.jpg> <out_prefix> <lowThresh> <highThresh>
+        // Example:
+        // ./hw2 canny_edge_detector data/Deer.jpg out/Deer 50 150
+
+        if (argc != 6)
+        {
+            PrintUsage();
+            return 1;
+        }
+
+        string inPath = argv[2];
+        string outPrefix = argv[3];
+
+        int lowT = 0, highT = 0;
+        if (!ParseInt(argv[4], lowT) || !ParseInt(argv[5], highT))
+        {
+            cerr << "Invalid thresholds\n";
+            return 1;
+        }
+
+        return RunCannyEdgeDetector(inPath, outPrefix, lowT, highT);
     }
 
     cerr << "Unknown command: " << cmd << "\n";

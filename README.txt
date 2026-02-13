@@ -78,3 +78,6 @@ Notes:
 ==================================================
 - Input images are expected under ./data (not included in submission).
 - All generated outputs will be written to ./out.
+- Structured Edge detector uses Piotr Dollár's implementation: https://github.com/pdollar/edges
+- This project assumes that the pretrained model file "modelBsds.mat" is copied into the data/ directory.
+- Before running SE_detector.m, please clone pdollar/edges cloned somewhere on your machine.

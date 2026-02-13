@@ -2,7 +2,7 @@
 // USC ID: 6656-3408-40
 // USC Email: kkim8899@usc.edu
 // Submission Date: February 22, 2026
-// Description: this file contains declarations for sobel edge detection functions.
+// Description: this file contains declarations for Sobel Edge Detector functions.
 #pragma once
 
 #include "image_io.h"
